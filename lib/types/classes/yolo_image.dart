@@ -1,26 +1,15 @@
-enum DamageType {
-  scratch,
-  hole,
-  missing;
-
-  String get text {
-    switch (this) {
-      case DamageType.scratch:
-        return 'Scratch(es)';
-      case DamageType.hole:
-        return 'Hole(s)';
-
-      case DamageType.missing:
-        return 'Missing Part(s)';
-    }
-  }
-}
-
 class YOLOImage {
-  String base64;
-  List<DamageType> damageTypes;
+  final String base64;
+  final bool status;
+  final String text;
+  final DateTime timestamp;
 
-  DateTime? timestamp;
+  const YOLOImage(this.base64, this.status, this.text, this.timestamp);
 
-  YOLOImage(this.base64, this.damageTypes);
+  factory YOLOImage.fromJSON(Map<String, dynamic> json) => YOLOImage(
+        json['image'],
+        json['status'] == 1,
+        json['text'],
+        json['timestamp'] ?? DateTime.now(),
+      );
 }

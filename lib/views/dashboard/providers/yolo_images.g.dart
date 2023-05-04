@@ -6,7 +6,7 @@ part of 'yolo_images.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$yOLOImagesStreamHash() => r'105764a13829ce751d51dab95daec4e35004b133';
+String _$yOLOImagesStreamHash() => r'52e591e6cacd2d13db18322b21aef1bb9ca76018';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -110,7 +110,7 @@ class YOLOImagesStreamProvider extends AutoDisposeStreamProvider<YOLOImage> {
   }
 }
 
-String _$damagedYOLOImagesHash() => r'91614b43d07b186ab10a5e0eb752d83392e0b57d';
+String _$damagedYOLOImagesHash() => r'1498b638d40288a424f514226ad48ba36f7df5db';
 
 /// See also [damagedYOLOImages].
 @ProviderFor(damagedYOLOImages)

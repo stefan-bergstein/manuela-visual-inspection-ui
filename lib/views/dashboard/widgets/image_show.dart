@@ -21,7 +21,6 @@ class _ImageShowState extends ConsumerState<ImageShow> {
   void _addImageOverlay(YOLOImage image) {
     SchedulerBinding.instance.addPostFrameCallback(
       (timeStamp) {
-        image.timestamp = DateTime.now();
         ref.read(yOLOImagesProvider.notifier).addImage(image);
 
         double imageHeight = _link.leaderSize!.height * 2 / 3;
@@ -105,7 +104,7 @@ class _ImageShowState extends ConsumerState<ImageShow> {
                     child: CircularProgressIndicator(),
                   ),
                   error: (error, stackTrace) => Text(
-                    error.toString(),
+                    '${error.toString()}\n\n${stackTrace.toString()}',
                   ),
                 ),
                 // StreamBuilder<YOLOImage>(

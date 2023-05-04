@@ -50,10 +50,7 @@ class DamagedYOLOImagesOverview extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(const Uuid().v4()),
-                              Text(damagedImage.timestamp!.toIso8601String()),
-                              const SizedBox(height: 24.0),
-                              Text(
-                                  'Damages: ${damagedImage.damageTypes.map((type) => type.text).toList().join(", ")}'),
+                              Text(damagedImage.timestamp.toIso8601String()),
                             ],
                           ),
                         ),

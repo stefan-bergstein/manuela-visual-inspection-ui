@@ -30,7 +30,7 @@ class DecoratedYOLOImage extends StatelessWidget {
       foregroundDecoration: BoxDecoration(
         border: Border.all(
           color: borderColor ??
-              (image.damageTypes.isNotEmpty
+              (image.status
                   ? Theme.of(context).colorScheme.errorContainer
                   : Colors.green),
           width: borderWidth,
