@@ -13,8 +13,6 @@ RUN dnf upgrade --refresh -y && \
     dnf install git -y && \
     dnf install unzip -y
 
-RUN git submodule update
-
 # Set the working directory
 WORKDIR /src
 
