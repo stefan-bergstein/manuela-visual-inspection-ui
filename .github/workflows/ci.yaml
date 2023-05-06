@@ -28,30 +28,16 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            ghcr.io/${{ github.repository }}/nginx-client
+            ghcr.io/${{ github.repository }}
           labels: |
-            org.opencontainers.image.title=nginx-client
-            org.opencontainers.image.description=Image based on nginx serving the web client
+            org.opencontainers.image.title=manuela-visual-inspection-ui
+            org.opencontainers.image.description=WebApp for the Manuela Visual Inspection Demo
             org.opencontainers.image.vendor=Kounex
           tags: |
             type=semver,pattern={{version}},value=${{ env.APP_VERSION }},priority=50
             type=ref,event=branch
             type=raw,value=latest
             type=sha
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: |
-            ghcr.io/${{ github.repository }}/nginx-client
-          labels: |
-            org.opencontainers.image.title=nginx-client
-            org.opencontainers.image.description=Image based on nginx serving the web client
-            org.opencontainers.image.vendor=Kounex
-          tags: |
-            type=ref,event=branch,priority=1000
-            type=sha
-            type=raw,value=latest
       - name: GHRC login
         uses: docker/login-action@v2
         with:
@@ -61,7 +47,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: ./client
+          file: Containerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
