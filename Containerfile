@@ -14,6 +14,12 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     rm -rf /var/cache/apt
 
+# Set the working directory
+WORKDIR /src
+
+# Copy all files over to the workdir of the build process
+COPY . .
+
 # Pinned flutter setup
 RUN ./flutterw config --no-analytics
 
@@ -22,12 +28,6 @@ RUN ./flutterw pub get
 
 # Build static web files (always canvaskit renderer)
 RUN ./flutterw build web --web-renderer canvaskit 
-
-# # Set the working directory
-# WORKDIR /src
-
-# # Copy all files over to the workdir of the build process
-# COPY . .
 
 # ------ RUNNER ------
 FROM registry.access.redhat.com/ubi8/nginx-120
