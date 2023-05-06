@@ -24,17 +24,19 @@ COPY . .
 RUN mkdir /.config && \
     mkdir /.pub-cache
 
-# Pinned flutter SDK
+# Download Flutter SDK
+RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
+ENV PATH="$PATH:/usr/local/flutter/bin"
+
+# Adjust permission to allow non-root user
 RUN chgrp -R 0 .flutter && \
     chmod -R g=u .flutter && \
     chgrp -R 0 /.config && \
     chmod -R g=u /.config && \
     chgrp -R 0 /.pub-cache && \
-    chmod -R g=u /.pub-cache
-
-# Download Flutter SDK
-RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
-ENV PATH="$PATH:/usr/local/flutter/bin"
+    chmod -R g=u /.pub-cache && \
+    chgrp -R 0 /usr/local/flutter && \
+    chmod -R g=u /usr/local/flutter
 
 USER 1000
 
