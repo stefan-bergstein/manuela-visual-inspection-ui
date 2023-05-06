@@ -13,6 +13,7 @@ RUN dnf upgrade --refresh -y && \
     dnf install git -y && \
     dnf install unzip -y
 
+RUN git fetch --unshallow 
 
 # Set the working directory
 WORKDIR /src
@@ -35,13 +36,13 @@ RUN chgrp -R 0 .flutter && \
 
 USER 1000
 
-RUN .flutter/bin/flutter config --no-analytics
+RUN ./flutterw config --no-analytics
 
 # Get all flutter dependencies
-RUN .flutter/bin/flutter pub get
+RUN ./flutterw pub get
 
 # Build static web files (always canvaskit renderer)
-RUN .flutter/bin/flutter build web --web-renderer canvaskit 
+RUN ./flutterw build web --web-renderer canvaskit --dart-define API_URL=${API_URL}
 
 # ------ RUNNER ------
 FROM registry.access.redhat.com/ubi8/nginx-120
