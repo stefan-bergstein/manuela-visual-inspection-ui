@@ -32,23 +32,15 @@ RUN chgrp -R 0 .flutter && \
     chgrp -R 0 /.pub-cache && \
     chmod -R g=u /.pub-cache
 
-# Download Flutter SDK
-RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
-ENV PATH="$PATH:/usr/local/flutter/bin"
-
 USER 1000
 
-# Switch to stable branch and upgrade
-RUN flutter channel stable
-RUN flutter upgrade
-
-RUN flutter config --no-analytics
+RUN ./flutterw config --no-analytics
 
 # Get all flutter dependencies
-RUN flutter pub get
+RUN ./flutterw pub get
 
 # Build static web files (always canvaskit renderer)
-RUN flutter build web --web-renderer canvaskit --dart-define API_URL=${API_URL}
+RUN ./flutterw build web --web-renderer canvaskit --dart-define API_URL=${API_URL}
 
 # ------ RUNNER ------
 FROM registry.access.redhat.com/ubi8/nginx-120
