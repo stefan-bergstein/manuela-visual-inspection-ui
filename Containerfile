@@ -28,10 +28,10 @@ RUN mkdir ./.config && \
 # Pinned flutter SDK
 RUN chgrp -R 0 ./.flutter && \
     chmod -R g=u ./.flutter && \
-    chgrp -R 0 /.config && \
-    chmod -R g=u /.config && \
-    chgrp -R 0 /.pub-cache && \
-    chmod -R g=u /.pub-cache
+    chgrp -R 0 ./.config && \
+    chmod -R g=u ./.config && \
+    chgrp -R 0 ./.pub-cache && \
+    chmod -R g=u ./.pub-cache
 
 USER 1000
 
