@@ -22,7 +22,8 @@ COPY . .
 # Used for the flutter configs (will otherwise be created by
 # the SDK)
 RUN mkdir /.config && \
-    mkdir /.pub-cache
+    mkdir /.pub-cache && \
+    mkdir /.dart-tool
 
 # Download Flutter SDK
 RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
@@ -35,16 +36,19 @@ RUN chgrp -R 0 .flutter && \
     chmod -R g=u /.config && \
     chgrp -R 0 /.pub-cache && \
     chmod -R g=u /.pub-cache && \
+    chgrp -R 0 /.dart-tool && \
+    chmod -R g=u /.dart-tool && \
     chgrp -R 0 /usr/local/flutter && \
     chmod -R g=u /usr/local/flutter
 
 USER 1000
 
+# Set flutter to not use dev analytics
+RUN flutter config --no-analytics
+
 # Switch to stable branch and upgrade
 RUN flutter channel stable
 RUN flutter upgrade
-
-RUN flutter config --no-analytics
 
 # Get all flutter dependencies
 RUN flutter pub get
