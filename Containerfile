@@ -13,13 +13,6 @@ RUN dnf upgrade --refresh -y && \
     dnf install git -y && \
     dnf install unzip -y
 
-# Set the working directory
-WORKDIR /src
-
-# Copy all files over to the workdir of the build process
-COPY . .
-
-RUN git submodule update --init --recursive
 
 # Used for the flutter configs (will otherwise be created by
 # the SDK)
@@ -43,6 +36,12 @@ RUN ./flutterw pub get
 
 # Build static web files (always canvaskit renderer)
 RUN ./flutterw build web --web-renderer canvaskit 
+
+# # Set the working directory
+# WORKDIR /src
+
+# # Copy all files over to the workdir of the build process
+# COPY . .
 
 # ------ RUNNER ------
 FROM registry.access.redhat.com/ubi8/nginx-120
