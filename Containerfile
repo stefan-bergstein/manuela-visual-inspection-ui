@@ -1,5 +1,5 @@
 # ------ BUILDER ------
-FROM ubuntu:22.10 as builder
+FROM redhat/ubi8:latest as builder
 
 # API URL which will be handed down to the flutter web
 # app at build time - if we need to provide it at a later
@@ -9,10 +9,25 @@ FROM ubuntu:22.10 as builder
 ARG API_URL
 
 # System setup
-RUN apt-get update && \ 
-    apt-get install -y unzip xz-utils git openssh-client curl && \
-    apt-get upgrade -y && \
-    rm -rf /var/cache/apt
+RUN dnf upgrade --refresh -y && \
+    dnf install git -y && \
+    dnf install unzip -y
+
+
+# Used for the flutter configs (will otherwise be created by
+# the SDK)
+RUN mkdir /.config && \
+    mkdir /.pub-cache
+
+# Pinned flutter SDK
+RUN chgrp -R 0 ./.flutter && \
+    chmod -R g=u ./.flutter && \
+    chgrp -R 0 /.config && \
+    chmod -R g=u /.config && \
+    chgrp -R 0 /.pub-cache && \
+    chmod -R g=u /.pub-cache
+
+USER 1000
 
 # Set the working directory
 WORKDIR /src
@@ -20,14 +35,13 @@ WORKDIR /src
 # Copy all files over to the workdir of the build process
 COPY . .
 
-# Pinned flutter setup
-RUN ./flutterw config --no-analytics
+RUN ./.flutter/bin/flutter config --no-analytics
 
 # Get all flutter dependencies
-RUN ./flutterw pub get
+RUN ./flutter/bin/flutter pub get
 
 # Build static web files (always canvaskit renderer)
-RUN ./flutterw build web --web-renderer canvaskit 
+RUN ./flutter/bin/flutter build web --web-renderer canvaskit 
 
 # ------ RUNNER ------
 FROM registry.access.redhat.com/ubi8/nginx-120
