@@ -19,6 +19,9 @@ WORKDIR /src
 # Copy all files over to the workdir of the build process
 COPY . .
 
+RUN chgrp -R 0 ./.flutter && \
+    chmod -R g=u ./.flutter
+
 USER 1000
 
 # Run basic check to download Dart SDK
