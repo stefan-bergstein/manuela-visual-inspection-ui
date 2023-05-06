@@ -34,8 +34,7 @@ RUN chgrp -R 0 ./.flutter && \
 
 USER 1000
 
-# Run basic check to download Dart SDK
-RUN ./flutterw doctor
+RUN ./flutterw config --no-analytics
 
 # Get all flutter dependencies
 RUN ./flutterw pub get
