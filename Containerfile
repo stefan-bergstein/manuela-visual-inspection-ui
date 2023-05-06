@@ -19,8 +19,18 @@ WORKDIR /src
 # Copy all files over to the workdir of the build process
 COPY . .
 
+# Used for the flutter configs (will otherwise be created by
+# the SDK)
+RUN mkdir /.config && \
+    mkdir /.pub-cache
+
+# Pinned flutter SDK
 RUN chgrp -R 0 ./.flutter && \
-    chmod -R g=u ./.flutter
+    chmod -R g=u ./.flutter && \
+    chgrp -R 0 /.config && \
+    chmod -R g=u /.config && \
+    chgrp -R 0 /.pub-cache && \
+    chmod -R g=u /.pub-cache
 
 USER 1000
 
