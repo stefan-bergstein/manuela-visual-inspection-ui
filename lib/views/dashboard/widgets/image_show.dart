@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../main.dart';
 import '../../../types/classes/yolo_image.dart';
 import '../providers/yolo_images.dart';
 import 'decorated_yolo_image.dart';
@@ -71,7 +72,7 @@ class _ImageShowState extends ConsumerState<ImageShow> {
         Padding(
           padding: const EdgeInsets.all(12.0),
           child: Text(
-            'Streamed Images',
+            'Streamed Images\n${env.apiURL ?? "EMPTY"}',
             style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
