@@ -8,28 +8,33 @@ FROM redhat/ubi8:latest as builder
 # called config at assets/env/ contianing those args
 ARG API_URL
 
-# Copy all files over to the workdir of the build process
-COPY . .
-
+# System setup
 RUN dnf upgrade --refresh -y && \
     dnf install git -y && \
     dnf install unzip -y
 
-# Used for the flutter configs
-RUN mkdir /.config && \
-    mkdir /.pub-cache
+# Set the working directory
+WORKDIR /src
+
+# Copy all files over to the workdir of the build process
+COPY . .
+
+USER 1000
+
+# Run basic check to download Dart SDK
+RUN ./flutterw doctor
 
 # Get all flutter dependencies
-RUN ./.flutterw pub get
+RUN ./flutterw pub get
 
 # Build static web files (always canvaskit renderer)
-RUN ./.flutterw build web --web-renderer canvaskit --dart-define API_URL=${API_URL}
+RUN ./flutterw build web --web-renderer canvaskit 
 
 # ------ RUNNER ------
 FROM registry.access.redhat.com/ubi8/nginx-120
 
 # Copy static files to folder where nginx will serve them
-COPY --from=builder /build/web .
+COPY --from=builder /src/build/web .
 
 # Change group and access rights so these folders / executables can
 # be used as non root for security reasons
