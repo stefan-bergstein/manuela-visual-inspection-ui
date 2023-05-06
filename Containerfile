@@ -30,8 +30,8 @@ RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
 ENV PATH="$PATH:/usr/local/flutter/bin"
 
 # Adjust permission to allow non-root user
-RUN chgrp -R 0 .flutter && \
-    chmod -R g=u .flutter && \
+RUN chgrp -R 0 /src && \
+    chmod -R g=u /src && \
     chgrp -R 0 /.config && \
     chmod -R g=u /.config && \
     chgrp -R 0 /.pub-cache && \
