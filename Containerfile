@@ -19,6 +19,8 @@ WORKDIR /src
 # Copy all files over to the workdir of the build process
 COPY . .
 
+RUN git submodule update --init --recursive
+
 # Used for the flutter configs (will otherwise be created by
 # the SDK)
 RUN mkdir /.config && \
