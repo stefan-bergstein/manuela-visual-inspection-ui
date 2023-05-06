@@ -14,10 +14,16 @@ RUN dnf upgrade --refresh -y && \
     dnf install unzip -y
 
 
+# Set the working directory
+WORKDIR /src
+
+# Copy all files over to the workdir of the build process
+COPY . .
+
 # Used for the flutter configs (will otherwise be created by
 # the SDK)
-RUN mkdir /.config && \
-    mkdir /.pub-cache
+RUN mkdir ./.config && \
+    mkdir ./.pub-cache
 
 # Pinned flutter SDK
 RUN chgrp -R 0 ./.flutter && \
@@ -28,12 +34,6 @@ RUN chgrp -R 0 ./.flutter && \
     chmod -R g=u /.pub-cache
 
 USER 1000
-
-# Set the working directory
-WORKDIR /src
-
-# Copy all files over to the workdir of the build process
-COPY . .
 
 RUN ./.flutter/bin/flutter config --no-analytics
 
