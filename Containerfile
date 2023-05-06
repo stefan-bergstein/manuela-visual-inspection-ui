@@ -22,26 +22,26 @@ COPY . .
 
 # Used for the flutter configs (will otherwise be created by
 # the SDK)
-RUN mkdir ./.config && \
-    mkdir ./.pub-cache
+RUN mkdir /.config && \
+    mkdir /.pub-cache
 
 # Pinned flutter SDK
-RUN chgrp -R 0 ./.flutter && \
-    chmod -R g=u ./.flutter && \
-    chgrp -R 0 ./.config && \
-    chmod -R g=u ./.config && \
-    chgrp -R 0 ./.pub-cache && \
-    chmod -R g=u ./.pub-cache
+RUN chgrp -R 0 .flutter && \
+    chmod -R g=u .flutter && \
+    chgrp -R 0 /.config && \
+    chmod -R g=u /.config && \
+    chgrp -R 0 /.pub-cache && \
+    chmod -R g=u /.pub-cache
 
 USER 1000
 
-RUN ./.flutter/bin/flutter config --no-analytics
+RUN .flutter/bin/flutter config --no-analytics
 
 # Get all flutter dependencies
-RUN ./flutter/bin/flutter pub get
+RUN .flutter/bin/flutter pub get
 
 # Build static web files (always canvaskit renderer)
-RUN ./flutter/bin/flutter build web --web-renderer canvaskit 
+RUN .flutter/bin/flutter build web --web-renderer canvaskit 
 
 # ------ RUNNER ------
 FROM registry.access.redhat.com/ubi8/nginx-120
