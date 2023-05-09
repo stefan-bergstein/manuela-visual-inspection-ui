@@ -25,6 +25,7 @@ Stream<YOLOImage> yOLOImagesStream(YOLOImagesStreamRef ref,
 
   Socket socket = io(
     env.apiURL ?? '',
+    OptionBuilder().setPath('/api'),
   );
 
   socket.onConnectError((error) => controller.addError(error));
