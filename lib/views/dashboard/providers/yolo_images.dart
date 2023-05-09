@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
+import '../../../main.dart';
 import '../../../types/classes/yolo_image.dart';
 
 part 'yolo_images.g.dart';
@@ -20,21 +21,10 @@ class YOLOStreamSettings {
 @riverpod
 Stream<YOLOImage> yOLOImagesStream(YOLOImagesStreamRef ref,
     {YOLOStreamSettings settings = const YOLOStreamSettings()}) {
-  // final socket = await Socket.connect(
-  //   'http://dashboard-manuela-visual-inspection.apps.ocp5.stormshift.coe.muc.redhat.com/ui2',
-  //   8080,
-  // );
-  // ref.onDispose(socket.close);
-
-  // await for (final imageJSON in socket.map(utf8.decode)) {
-  //   print('LOL');
-  //   // yield YOLOImage.fromJSON(imageJSON);
-  // }
-
   StreamController<YOLOImage> controller = StreamController();
 
   Socket socket = io(
-    'http://dashboard-manuela-visual-inspection.apps.ocp5.stormshift.coe.muc.redhat.com/ui2',
+    env.apiURL ?? '',
   );
 
   socket.onConnectError((error) => controller.addError(error));
