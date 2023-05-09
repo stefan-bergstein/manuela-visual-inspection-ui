@@ -54,7 +54,7 @@ RUN flutter upgrade
 RUN flutter pub get
 
 # Build static web files (always canvaskit renderer)
-RUN flutter build web --web-renderer canvaskit --web-browser-flag "--disable-web-security" --dart-define API_URL=${API_URL}
+RUN flutter build web --web-renderer canvaskit --dart-define API_URL=${API_URL}
 
 # ------ RUNNER ------
 FROM registry.access.redhat.com/ubi8/nginx-120
