@@ -23,10 +23,7 @@ Stream<YOLOImage> yOLOImagesStream(YOLOImagesStreamRef ref,
     {YOLOStreamSettings settings = const YOLOStreamSettings()}) {
   StreamController<YOLOImage> controller = StreamController();
 
-  Socket socket = io(
-    env.apiURL ?? '',
-    OptionBuilder().setPath('/api').build(),
-  );
+  Socket socket = io(env.apiURL ?? '');
 
   socket.onConnectError((error) => controller.addError(error));
   socket.on('server2ui2', (data) => controller.add(YOLOImage.fromJSON(data)));
