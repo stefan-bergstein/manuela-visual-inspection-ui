@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:manuela_visual_inspection_ui/utils/design_system.dart';
 
 import '../../../types/classes/yolo_image.dart';
 
@@ -10,8 +11,8 @@ class DecoratedYOLOImage extends StatelessWidget {
   final double? height;
   final double? width;
 
-  final double borderRadius;
-  final double borderWidth;
+  final double? borderRadius;
+  final double? borderWidth;
   final Color? borderColor;
 
   const DecoratedYOLOImage({
@@ -19,8 +20,8 @@ class DecoratedYOLOImage extends StatelessWidget {
     required this.image,
     this.height,
     this.width,
-    this.borderRadius = 12.0,
-    this.borderWidth = 3.0,
+    this.borderRadius,
+    this.borderWidth,
     this.borderColor,
   });
 
@@ -33,12 +34,16 @@ class DecoratedYOLOImage extends StatelessWidget {
               (image.status
                   ? Theme.of(context).colorScheme.errorContainer
                   : Colors.green),
-          width: borderWidth,
+          width: borderWidth ?? DesignSystem.border.width3,
         ),
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: BorderRadius.circular(
+          borderRadius ?? DesignSystem.border.radius12,
+        ),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: BorderRadius.circular(
+          borderRadius ?? DesignSystem.border.radius12,
+        ),
         child: Image.memory(
           base64Decode(
             image.base64.startsWith('data:')

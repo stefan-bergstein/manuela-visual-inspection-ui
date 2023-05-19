@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -18,45 +20,52 @@ class YOLOStreamSettings {
   });
 }
 
+Stream<YOLOImage> _mockImages(
+    {YOLOStreamSettings settings = const YOLOStreamSettings()}) async* {
+  Iterator<YOLOImage> iterNotDamaged = _images.iterator..moveNext();
+  Iterator<YOLOImage> iterDamaged = _images.iterator..moveNext();
+
+  while (true) {
+    await Future.delayed(Duration(milliseconds: settings.milliseconds), () {});
+
+    bool damaged = Random().nextDouble() <= settings.errorProbability;
+
+    YOLOImage? image;
+    while (image == null) {
+      if (damaged) {
+        image = iterDamaged.current.status ? iterDamaged.current : null;
+        if (!iterDamaged.moveNext()) {
+          iterDamaged = _images.iterator..moveNext();
+        }
+      } else {
+        image = !iterNotDamaged.current.status ? iterNotDamaged.current : null;
+        if (!iterNotDamaged.moveNext()) {
+          iterNotDamaged = _images.iterator..moveNext();
+        }
+      }
+    }
+
+    yield image;
+  }
+}
+
 @riverpod
 Stream<YOLOImage> yOLOImagesStream(YOLOImagesStreamRef ref,
-    {YOLOStreamSettings settings = const YOLOStreamSettings()}) {
-  StreamController<YOLOImage> controller = StreamController();
+    {bool mockMode = false}) {
+  if (!mockMode) {
+    StreamController<YOLOImage> controller = StreamController();
 
-  Socket socket = io(env.apiURL ?? '');
+    Socket socket = io(env.apiURL ?? '');
 
-  socket.onConnectError((error) => controller.addError(error));
-  socket.on('server2ui2', (data) => controller.add(YOLOImage.fromJSON(data)));
-  socket.onDisconnect((_) => controller.addError(_));
-  socket.onError((error) => controller.addError(error));
+    socket.onConnectError((error) => controller.addError(error));
+    socket.on('server2ui2', (data) => controller.add(YOLOImage.fromJSON(data)));
+    socket.onDisconnect((_) => controller.addError(_));
+    socket.onError((error) => controller.addError(error));
 
-  return controller.stream;
-
-  // Iterator<YOLOImage> iterNotDamaged = _images.iterator..moveNext();
-  // Iterator<YOLOImage> iterDamaged = _images.iterator..moveNext();
-
-  // while (true) {
-  //   await Future.delayed(Duration(milliseconds: settings.milliseconds), () {});
-
-  //   bool damaged = Random().nextDouble() <= settings.errorProbability;
-
-  //   YOLOImage? image;
-  //   while (image == null) {
-  //     if (damaged) {
-  //       image = iterDamaged.current.status ? iterDamaged.current : null;
-  //       if (!iterDamaged.moveNext()) {
-  //         iterDamaged = _images.iterator..moveNext();
-  //       }
-  //     } else {
-  //       image = iterNotDamaged.current.status ? iterNotDamaged.current : null;
-  //       if (!iterNotDamaged.moveNext()) {
-  //         iterNotDamaged = _images.iterator..moveNext();
-  //       }
-  //     }
-  //   }
-
-  //   yield image;
-  // }
+    return controller.stream;
+  } else {
+    return _mockImages();
+  }
 }
 
 @riverpod
@@ -75,7 +84,14 @@ List<YOLOImage> damagedYOLOImages(DamagedYOLOImagesRef ref) {
 }
 
 List<YOLOImage> _images = _rawImages
-    .map((rawImage) => YOLOImage(rawImage, false, 'text', DateTime.now()))
+    .mapIndexed(
+      (index, rawImage) => YOLOImage(
+        rawImage,
+        [2, 4, 6].any((number) => number == index),
+        'text',
+        DateTime.now(),
+      ),
+    )
     .toList();
 
 List<String> _rawImages = [

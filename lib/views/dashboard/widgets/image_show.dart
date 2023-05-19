@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:manuela_visual_inspection_ui/utils/design_system.dart';
 
 import '../../../types/classes/yolo_image.dart';
 import '../providers/yolo_images.dart';
@@ -17,6 +18,8 @@ class ImageShow extends ConsumerStatefulWidget {
 class _ImageShowState extends ConsumerState<ImageShow> {
   final GlobalKey _imageBoxKey = GlobalKey();
   final LayerLink _link = LayerLink();
+
+  final List<OverlayEntry> _currentEntries = [];
 
   void _addImageOverlay(YOLOImage image) {
     SchedulerBinding.instance.addPostFrameCallback(
@@ -40,7 +43,10 @@ class _ImageShowState extends ConsumerState<ImageShow> {
                 height: _link.leaderSize!.height * 2 / 3,
               )
                   .animate(
-                    onComplete: (controller) => entry.remove(),
+                    onComplete: (controller) {
+                      entry.remove();
+                      _currentEntries.remove(entry);
+                    },
                   )
                   .fadeIn(
                     duration: const Duration(milliseconds: 1000),
@@ -57,19 +63,29 @@ class _ImageShowState extends ConsumerState<ImageShow> {
           ),
         );
         Overlay.of(context).insert(entry);
+        _currentEntries.add(entry);
       },
     );
   }
 
   @override
+  void dispose() {
+    for (var entry in _currentEntries) {
+      entry.remove();
+    }
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final yoloImage = ref.watch(yOLOImagesStreamProvider());
+    final yoloImage = ref.watch(yOLOImagesStreamProvider(mockMode: true));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: EdgeInsets.all(DesignSystem.spacing.x12),
           child: Text(
             'Streamed Images',
             style: Theme.of(context).textTheme.headlineMedium,

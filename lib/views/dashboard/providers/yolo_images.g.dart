@@ -6,7 +6,7 @@ part of 'yolo_images.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$yOLOImagesStreamHash() => r'52e591e6cacd2d13db18322b21aef1bb9ca76018';
+String _$yOLOImagesStreamHash() => r'e502e57318de7befb609e5a8b496f8d2153fd53e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -42,10 +42,10 @@ class YOLOImagesStreamFamily extends Family<AsyncValue<YOLOImage>> {
 
   /// See also [yOLOImagesStream].
   YOLOImagesStreamProvider call({
-    YOLOStreamSettings settings = const YOLOStreamSettings(),
+    bool mockMode = false,
   }) {
     return YOLOImagesStreamProvider(
-      settings: settings,
+      mockMode: mockMode,
     );
   }
 
@@ -54,7 +54,7 @@ class YOLOImagesStreamFamily extends Family<AsyncValue<YOLOImage>> {
     covariant YOLOImagesStreamProvider provider,
   ) {
     return call(
-      settings: provider.settings,
+      mockMode: provider.mockMode,
     );
   }
 
@@ -77,11 +77,11 @@ class YOLOImagesStreamFamily extends Family<AsyncValue<YOLOImage>> {
 class YOLOImagesStreamProvider extends AutoDisposeStreamProvider<YOLOImage> {
   /// See also [yOLOImagesStream].
   YOLOImagesStreamProvider({
-    this.settings = const YOLOStreamSettings(),
+    this.mockMode = false,
   }) : super.internal(
           (ref) => yOLOImagesStream(
             ref,
-            settings: settings,
+            mockMode: mockMode,
           ),
           from: yOLOImagesStreamProvider,
           name: r'yOLOImagesStreamProvider',
@@ -94,17 +94,17 @@ class YOLOImagesStreamProvider extends AutoDisposeStreamProvider<YOLOImage> {
               YOLOImagesStreamFamily._allTransitiveDependencies,
         );
 
-  final YOLOStreamSettings settings;
+  final bool mockMode;
 
   @override
   bool operator ==(Object other) {
-    return other is YOLOImagesStreamProvider && other.settings == settings;
+    return other is YOLOImagesStreamProvider && other.mockMode == mockMode;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, settings.hashCode);
+    hash = _SystemHash.combine(hash, mockMode.hashCode);
 
     return _SystemHash.finish(hash);
   }

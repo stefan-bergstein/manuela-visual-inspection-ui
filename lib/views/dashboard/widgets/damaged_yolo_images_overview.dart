@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
+import 'package:manuela_visual_inspection_ui/utils/design_system.dart';
 
 import '../../../types/classes/yolo_image.dart';
 import '../providers/yolo_images.dart';
@@ -18,7 +18,7 @@ class DamagedYOLOImagesOverview extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: EdgeInsets.all(DesignSystem.spacing.x12),
           child: Text(
             'Damaged Parts',
             style: Theme.of(context).textTheme.headlineLarge,
@@ -26,35 +26,43 @@ class DamagedYOLOImagesOverview extends ConsumerWidget {
         ),
         const Divider(height: 1.0),
         Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: EdgeInsets.all(DesignSystem.spacing.x24),
           child: Wrap(
-            spacing: 24.0,
-            runSpacing: 24.0,
+            spacing: DesignSystem.spacing.x24,
+            runSpacing: DesignSystem.spacing.x24,
             children: damagedImages
                 .map(
                   (damagedImage) => Card(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius:
+                          BorderRadius.circular(DesignSystem.border.radius12),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.errorContainer,
+                        width: DesignSystem.border.width05,
+                      ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        DecoratedYOLOImage(
-                          image: damagedImage,
-                          height: 128.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(const Uuid().v4()),
-                              Text(damagedImage.timestamp.toIso8601String()),
-                            ],
+                    child: SizedBox(
+                      height: 128.0,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DecoratedYOLOImage(
+                            image: damagedImage,
+                            height: 128.0,
                           ),
-                        ),
-                      ],
+                          Container(
+                            width: 192.0,
+                            padding: EdgeInsets.all(DesignSystem.spacing.x24),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(damagedImage.timestamp.toUtc().toString()),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 )
