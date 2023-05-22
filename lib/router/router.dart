@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:manuela_visual_inspection_ui/router/tab_base.dart';
 import 'package:manuela_visual_inspection_ui/views/about/about.dart';
@@ -12,9 +11,11 @@ class RouterUtils {
   static final router = GoRouter(
     initialLocation: DashboardRoute.blueprint,
     routes: [
-      ShellRoute(
-        builder: (context, state, child) => TabBase(child: child),
-        routes: TabMeta.values.map((tab) => tab.route).toList(),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) => TabBase(
+          navigationShell: navigationShell,
+        ),
+        branches: TabMeta.values.map((tab) => tab.branch).toList(),
       ),
     ],
   );
@@ -25,23 +26,8 @@ class RouterUtils {
         child: child,
       );
 
-  static final Map<TabMeta, TabRoute> _currentTabRoute = {
-    TabMeta.dashboard: DashboardRoute(),
-    TabMeta.about: AboutRoute(),
-  };
-
-  static void goTo(BuildContext context, WidgetRef ref,
-      {BaseRoute? route, TabMeta? tab}) {
-    assert(route != null || tab != null);
-
-    if (tab != null) {
-      GoRouter.of(context).go(_currentTabRoute[tab]!.path);
-    } else {
-      if (route is TabRoute) {
-        _currentTabRoute[TabMeta.values[ref.read(tabIndexProvider)]] = route;
-      }
-      GoRouter.of(context).go(route!.path);
-    }
+  static void goTo(BuildContext context, BaseRoute route) {
+    GoRouter.of(context).go(route.path);
   }
 
   static Page _platformTransition(GoRouterState state, Widget child) =>
@@ -96,26 +82,34 @@ enum TabMeta {
         TabMeta.about => CupertinoIcons.info_circle_fill,
       };
 
-  GoRoute get route => switch (this) {
-        TabMeta.dashboard => GoRoute(
-            path: DashboardRoute.blueprint,
-            pageBuilder: (context, state) => RouterUtils._noTransition(
-              state,
-              RouterUtils._routeWrapper(
-                text,
-                const DashboardView(),
+  StatefulShellBranch get branch => switch (this) {
+        TabMeta.dashboard => StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: DashboardRoute.blueprint,
+                pageBuilder: (context, state) => RouterUtils._noTransition(
+                  state,
+                  RouterUtils._routeWrapper(
+                    text,
+                    const DashboardView(),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        TabMeta.about => GoRoute(
-            path: AboutRoute.blueprint,
-            pageBuilder: (context, state) => RouterUtils._noTransition(
-              state,
-              RouterUtils._routeWrapper(
-                text,
-                const AboutView(),
+        TabMeta.about => StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AboutRoute.blueprint,
+                pageBuilder: (context, state) => RouterUtils._noTransition(
+                  state,
+                  RouterUtils._routeWrapper(
+                    text,
+                    const AboutView(),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
       };
 }

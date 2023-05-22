@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:manuela_visual_inspection_ui/utils/design_system.dart';
 
 import '../../../types/classes/yolo_image.dart';
 import '../providers/yolo_images.dart';
@@ -79,78 +78,63 @@ class _ImageShowState extends ConsumerState<ImageShow> {
 
   @override
   Widget build(BuildContext context) {
-    final yoloImage = ref.watch(yOLOImagesStreamProvider(mockMode: true));
+    final yoloImage = ref.watch(yOLOImagesStreamProvider());
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.all(DesignSystem.spacing.x12),
-          child: Text(
-            'Streamed Images',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-        ),
-        const Divider(height: 1.0),
-        CompositedTransformTarget(
-          link: _link,
-          child: NotificationListener<SizeChangedLayoutNotification>(
-            // onNotification: (notification) {
-            //   if (_entry.mounted) {
-            //     SchedulerBinding.instance.addPostFrameCallback((_) {
-            //       _entry.markNeedsBuild();
-            //     });
-            //   }
-            //   return true;
-            // },
-            child: SizeChangedLayoutNotifier(
-              child: Container(
-                key: _imageBoxKey,
-                alignment: Alignment.center,
-                height: 500,
-                width: double.infinity,
-                color:
-                    Theme.of(context).colorScheme.onBackground.withOpacity(0.1),
-                child: yoloImage.when(
-                  data: (image) {
-                    _addImageOverlay(image);
-                    return const SizedBox();
-                  },
-                  loading: () => const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                  error: (error, stackTrace) => Text(
-                    '${error.toString()}\n\n${stackTrace.toString()}',
-                  ),
-                ),
-                // StreamBuilder<YOLOImage>(
-                //   stream: _images,
-                //   builder: (context, imagesSnapshot) {
-                //     if (imagesSnapshot.connectionState ==
-                //         ConnectionState.active) {
-                //       if (imagesSnapshot.hasData) {
-                //         _addImageOverlay(imagesSnapshot.data!);
-                //         return const SizedBox();
-                //       } else {
-                //         return const Text('ERROR');
-                //       }
-                //     } else if (imagesSnapshot.connectionState ==
-                //         ConnectionState.waiting) {
-                //       return const Center(
-                //         child: CircularProgressIndicator(),
-                //       );
-                //     } else {
-                //       return Text(
-                //           imagesSnapshot.error?.toString() ?? 'The end');
-                //     }
-                //   },
-                // ),
+    return CompositedTransformTarget(
+      link: _link,
+      child: NotificationListener<SizeChangedLayoutNotification>(
+        // onNotification: (notification) {
+        //   if (_entry.mounted) {
+        //     SchedulerBinding.instance.addPostFrameCallback((_) {
+        //       _entry.markNeedsBuild();
+        //     });
+        //   }
+        //   return true;
+        // },
+        child: SizeChangedLayoutNotifier(
+          child: Container(
+            key: _imageBoxKey,
+            alignment: Alignment.center,
+            height: 500,
+            width: double.infinity,
+            color: Theme.of(context).colorScheme.onBackground.withOpacity(0.1),
+            child: yoloImage.when(
+              data: (image) {
+                _addImageOverlay(image);
+                return const SizedBox();
+              },
+              loading: () => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              error: (error, stackTrace) => Text(
+                '${error.toString()}\n\n${stackTrace.toString()}',
               ),
             ),
+            // StreamBuilder<YOLOImage>(
+            //   stream: _images,
+            //   builder: (context, imagesSnapshot) {
+            //     if (imagesSnapshot.connectionState ==
+            //         ConnectionState.active) {
+            //       if (imagesSnapshot.hasData) {
+            //         _addImageOverlay(imagesSnapshot.data!);
+            //         return const SizedBox();
+            //       } else {
+            //         return const Text('ERROR');
+            //       }
+            //     } else if (imagesSnapshot.connectionState ==
+            //         ConnectionState.waiting) {
+            //       return const Center(
+            //         child: CircularProgressIndicator(),
+            //       );
+            //     } else {
+            //       return Text(
+            //           imagesSnapshot.error?.toString() ?? 'The end');
+            //     }
+            //   },
+            // ),
           ),
         ),
-        const Divider(height: 1.0),
-      ],
+      ),
     );
   }
 }

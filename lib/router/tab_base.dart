@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:manuela_visual_inspection_ui/router/router.dart';
 import 'package:manuela_visual_inspection_ui/utils/design_system.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'tab_base.g.dart';
-
-@riverpod
-class TabIndex extends _$TabIndex {
-  @override
-  int build() => 0;
-
-  void setIndex(int index) => state = index;
-}
-
-class TabBase extends ConsumerWidget {
-  final Widget child;
+class TabBase extends StatelessWidget {
+  final StatefulNavigationShell navigationShell;
 
   const TabBase({
     super.key,
-    required this.child,
+    required this.navigationShell,
   });
 
+  void _onTap(BuildContext context, int index) {
+    if (index != navigationShell.currentIndex) {
+      navigationShell.goBranch(index);
+    } else {
+      if (GoRouter.of(context).canPop()) {
+        GoRouter.of(context).pop();
+      }
+    }
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final tabIndex = ref.watch(tabIndexProvider);
+  Widget build(BuildContext context) {
     final breakpoint =
         DesignSystem.breakpoint(MediaQuery.of(context).size.width);
 
@@ -34,7 +32,7 @@ class TabBase extends ConsumerWidget {
         children: [
           if (breakpoint > Breakpoint.sm)
             NavigationRail(
-              selectedIndex: tabIndex,
+              selectedIndex: navigationShell.currentIndex,
               labelType: NavigationRailLabelType.all,
               destinations: TabMeta.values
                   .map(
@@ -44,26 +42,16 @@ class TabBase extends ConsumerWidget {
                     ),
                   )
                   .toList(),
-              onDestinationSelected: (index) {
-                if (index != ref.read(tabIndexProvider)) {
-                  ref.read(tabIndexProvider.notifier).setIndex(index);
-
-                  RouterUtils.goTo(
-                    context,
-                    ref,
-                    tab: TabMeta.values[index],
-                  );
-                }
-              },
+              onDestinationSelected: (index) => _onTap(context, index),
             ),
           Expanded(
-            child: child,
+            child: navigationShell,
           ),
         ],
       ),
       bottomNavigationBar: breakpoint <= Breakpoint.sm
           ? NavigationBar(
-              selectedIndex: tabIndex,
+              selectedIndex: navigationShell.currentIndex,
               destinations: TabMeta.values
                   .map(
                     (tab) => NavigationDestination(
@@ -72,17 +60,7 @@ class TabBase extends ConsumerWidget {
                     ),
                   )
                   .toList(),
-              onDestinationSelected: (index) {
-                if (index != ref.read(tabIndexProvider)) {
-                  ref.read(tabIndexProvider.notifier).setIndex(index);
-
-                  RouterUtils.goTo(
-                    context,
-                    ref,
-                    tab: TabMeta.values[index],
-                  );
-                }
-              },
+              onDestinationSelected: (index) => _onTap(context, index),
             )
           : const SizedBox(),
     );

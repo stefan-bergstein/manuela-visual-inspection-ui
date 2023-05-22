@@ -6,7 +6,7 @@ part of 'yolo_images.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$yOLOImagesStreamHash() => r'e502e57318de7befb609e5a8b496f8d2153fd53e';
+String _$yOLOImagesStreamHash() => r'26451c04d41d39875a8e10569ce480d6a5389f78';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -42,7 +42,7 @@ class YOLOImagesStreamFamily extends Family<AsyncValue<YOLOImage>> {
 
   /// See also [yOLOImagesStream].
   YOLOImagesStreamProvider call({
-    bool mockMode = false,
+    bool? mockMode,
   }) {
     return YOLOImagesStreamProvider(
       mockMode: mockMode,
@@ -77,7 +77,7 @@ class YOLOImagesStreamFamily extends Family<AsyncValue<YOLOImage>> {
 class YOLOImagesStreamProvider extends AutoDisposeStreamProvider<YOLOImage> {
   /// See also [yOLOImagesStream].
   YOLOImagesStreamProvider({
-    this.mockMode = false,
+    this.mockMode,
   }) : super.internal(
           (ref) => yOLOImagesStream(
             ref,
@@ -94,7 +94,7 @@ class YOLOImagesStreamProvider extends AutoDisposeStreamProvider<YOLOImage> {
               YOLOImagesStreamFamily._allTransitiveDependencies,
         );
 
-  final bool mockMode;
+  final bool? mockMode;
 
   @override
   bool operator ==(Object other) {

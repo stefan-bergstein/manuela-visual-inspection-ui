@@ -12,7 +12,16 @@ Future<void> loadENV() async {
   String envString =
       await rootBundle.loadString('assets/env/config', cache: false);
 
-  env = Env(apiURL: envString.split('API_URL=')[1]);
+  Map<String, String> envMap = {};
+
+  for (final envLine in envString.split('\n')) {
+    envMap.putIfAbsent(envLine.split('=')[0], () => envLine.split('=')[1]);
+  }
+
+  env = Env(
+    apiURL: envMap['API_URL'],
+    mockMode: bool.tryParse(envMap['MOCK_MODE'] ?? '') ?? false,
+  );
 }
 
 void main() async {

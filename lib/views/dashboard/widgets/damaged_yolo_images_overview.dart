@@ -14,66 +14,53 @@ class DamagedYOLOImagesOverview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<YOLOImage> damagedImages = ref.watch(damagedYOLOImagesProvider);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.all(DesignSystem.spacing.x12),
-          child: Text(
-            'Damaged Parts',
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
-        ),
-        const Divider(height: 1.0),
-        Padding(
-          padding: EdgeInsets.all(DesignSystem.spacing.x24),
-          child: Wrap(
-            spacing: DesignSystem.spacing.x24,
-            runSpacing: DesignSystem.spacing.x24,
-            children: damagedImages
-                .map(
-                  (damagedImage) => Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(DesignSystem.border.radius12),
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.errorContainer,
-                        width: DesignSystem.border.width05,
-                      ),
-                    ),
-                    child: SizedBox(
-                      height: 128.0,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          DecoratedYOLOImage(
-                            image: damagedImage,
-                            height: 128.0,
-                          ),
-                          Container(
-                            width: 192.0,
-                            padding: EdgeInsets.all(DesignSystem.spacing.x24),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(damagedImage.timestamp.toUtc().toString()),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+    return Padding(
+      padding: EdgeInsets.all(DesignSystem.spacing.x24),
+      child: Wrap(
+        spacing: DesignSystem.spacing.x24,
+        runSpacing: DesignSystem.spacing.x24,
+        children: damagedImages
+            .map(
+              (damagedImage) => Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DesignSystem.border.radius12),
+                  side: BorderSide(
+                    color: Theme.of(context).colorScheme.errorContainer,
+                    width: DesignSystem.border.width05,
                   ),
-                )
-                .toList()
-                .animate()
-                .fade(
-                  duration: const Duration(milliseconds: 500),
                 ),
-          ),
-        ),
-      ],
+                child: SizedBox(
+                  height: 128.0,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DecoratedYOLOImage(
+                        image: damagedImage,
+                        height: 128.0,
+                      ),
+                      Container(
+                        width: 192.0,
+                        padding: EdgeInsets.all(DesignSystem.spacing.x24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(damagedImage.timestamp.toUtc().toString()),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+            .toList()
+            .animate()
+            .fade(
+              duration: const Duration(milliseconds: 500),
+            ),
+      ),
     );
   }
 }

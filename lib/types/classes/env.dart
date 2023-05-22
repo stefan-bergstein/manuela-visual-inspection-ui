@@ -1,7 +1,9 @@
 class Env {
-  String? apiURL;
+  final String? apiURL;
+  final bool mockMode;
 
   Env({
     this.apiURL,
+    required this.mockMode,
   });
 }
