@@ -38,12 +38,14 @@ RUN chgrp -R 0 /src && \
     chmod -R g=u /.pub-cache && \
     chgrp -R 0 /.dart-tool && \
     chmod -R g=u /.dart-tool && \
+    chgrp -R 0 /.gitignore && \
+    chmod -R g=u /.gitignore && \
     chgrp -R 0 /usr/local/flutter && \
     chmod -R g=u /usr/local/flutter
 
-USER 1000
-
 RUN git config --global --add safe.directory /usr/local/flutter
+
+USER 1000
 
 # Set flutter to not use dev analytics
 RUN flutter config --no-analytics
