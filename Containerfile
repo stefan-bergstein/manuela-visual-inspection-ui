@@ -23,9 +23,11 @@ COPY . .
 # the SDK)
 RUN mkdir /.config && \
     mkdir /.pub-cache && \
-    mkdir /.dart-tool
+    mkdir /.dart-tool && \
+    mkdir /usr/local/flutter
 
 # Download Flutter SDK
+RUN git config --global --add safe.directory /usr/local/flutter
 RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
 ENV PATH="$PATH:/usr/local/flutter/bin"
 
@@ -38,12 +40,9 @@ RUN chgrp -R 0 /src && \
     chmod -R g=u /.pub-cache && \
     chgrp -R 0 /.dart-tool && \
     chmod -R g=u /.dart-tool && \
-    chgrp -R 0 /.gitignore && \
-    chmod -R g=u /.gitignore && \
     chgrp -R 0 /usr/local/flutter && \
     chmod -R g=u /usr/local/flutter
 
-RUN git config --global --add safe.directory /usr/local/flutter
 
 USER 1000
 
