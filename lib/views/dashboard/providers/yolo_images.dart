@@ -68,7 +68,7 @@ Stream<YOLOImage> yOLOImagesStream(YOLOImagesStreamRef ref, {bool? mockMode}) {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class YOLOImages extends _$YOLOImages {
   @override
   List<YOLOImage> build() => [];

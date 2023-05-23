@@ -50,6 +50,7 @@ class DecoratedYOLOImage extends StatelessWidget {
                 ? image.base64.split(',').skip(1).join()
                 : image.base64,
           ),
+          gaplessPlayback: true,
           height: height,
           width: width,
           fit: BoxFit.cover,

@@ -14,11 +14,15 @@ class ImageShow extends ConsumerStatefulWidget {
   ConsumerState<ImageShow> createState() => _ImageShowState();
 }
 
-class _ImageShowState extends ConsumerState<ImageShow> {
+class _ImageShowState extends ConsumerState<ImageShow>
+    with AutomaticKeepAliveClientMixin {
   final GlobalKey _imageBoxKey = GlobalKey();
   final LayerLink _link = LayerLink();
 
   final List<OverlayEntry> _currentEntries = [];
+
+  @override
+  bool get wantKeepAlive => true;
 
   void _addImageOverlay(YOLOImage image) {
     SchedulerBinding.instance.addPostFrameCallback(
@@ -78,7 +82,12 @@ class _ImageShowState extends ConsumerState<ImageShow> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final yoloImage = ref.watch(yOLOImagesStreamProvider());
+
+    ref.listen(yOLOImagesStreamProvider(), (previous, next) {
+      next.whenData((value) => _addImageOverlay(value));
+    });
 
     return CompositedTransformTarget(
       link: _link,
@@ -100,7 +109,6 @@ class _ImageShowState extends ConsumerState<ImageShow> {
             color: Theme.of(context).colorScheme.onBackground.withOpacity(0.1),
             child: yoloImage.when(
               data: (image) {
-                _addImageOverlay(image);
                 return const SizedBox();
               },
               loading: () => const Center(
@@ -110,28 +118,6 @@ class _ImageShowState extends ConsumerState<ImageShow> {
                 '${error.toString()}\n\n${stackTrace.toString()}',
               ),
             ),
-            // StreamBuilder<YOLOImage>(
-            //   stream: _images,
-            //   builder: (context, imagesSnapshot) {
-            //     if (imagesSnapshot.connectionState ==
-            //         ConnectionState.active) {
-            //       if (imagesSnapshot.hasData) {
-            //         _addImageOverlay(imagesSnapshot.data!);
-            //         return const SizedBox();
-            //       } else {
-            //         return const Text('ERROR');
-            //       }
-            //     } else if (imagesSnapshot.connectionState ==
-            //         ConnectionState.waiting) {
-            //       return const Center(
-            //         child: CircularProgressIndicator(),
-            //       );
-            //     } else {
-            //       return Text(
-            //           imagesSnapshot.error?.toString() ?? 'The end');
-            //     }
-            //   },
-            // ),
           ),
         ),
       ),
