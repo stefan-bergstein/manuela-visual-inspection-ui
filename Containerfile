@@ -27,8 +27,8 @@ RUN mkdir /.config && \
     mkdir /usr/local/flutter
 
 # Download Flutter SDK
-RUN git config --global --add safe.directory /usr/local/flutter
 RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
+RUN git config --system --add safe.directory /usr/local/flutter
 ENV PATH="$PATH:/usr/local/flutter/bin"
 
 # Adjust permission to allow non-root user
