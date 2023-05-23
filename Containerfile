@@ -38,7 +38,9 @@ RUN chgrp -R 0 /src && \
     chgrp -R 0 /.pub-cache && \
     chmod -R g=u /.pub-cache && \
     chgrp -R 0 /.dart-tool && \
-    chmod -R g=u /.dart-tool
+    chmod -R g=u /.dart-tool && \
+    chgrp -R 0 /usr/local/flutter && \
+    chmod -R g=u /usr/local/flutter
 
 
 USER 1000
