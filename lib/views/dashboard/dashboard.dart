@@ -18,7 +18,7 @@ class DashboardView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                BaseTitle(text: 'Streamed Images'),
+                BaseTitle(text: 'MANUela Visual Inspection'),
                 ThemeSwitcher(),
               ],
             ),

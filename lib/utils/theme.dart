@@ -6,7 +6,7 @@ sealed class ThemeUtils {
       primary: Color(0xffee0000),
       secondary: Color(0xffee0000),
       tertiary: Color(0xffee0000),
-      background: Colors.white,
+      background: Color.fromARGB(255, 250, 250, 250),
     ),
   );
 

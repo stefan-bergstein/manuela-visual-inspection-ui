@@ -14,8 +14,8 @@ class ThemeSwitcher extends ConsumerWidget {
       onPressed: ref.read(userThemeProvider.notifier).nextThemeMode,
       icon: Icon(
         switch (userTheme) {
-          ThemeMode.light => CupertinoIcons.lightbulb_fill,
-          ThemeMode.dark => CupertinoIcons.lightbulb,
+          ThemeMode.dark => CupertinoIcons.moon_fill,
+          ThemeMode.light => CupertinoIcons.sun_min_fill,
           ThemeMode.system => CupertinoIcons.lightbulb_slash,
         },
       ),

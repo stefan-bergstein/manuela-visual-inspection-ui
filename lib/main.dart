@@ -20,7 +20,7 @@ Future<void> loadENV() async {
 
   env = Env(
     apiURL: envMap['API_URL'],
-    mockMode: bool.tryParse(envMap['MOCK_MODE'] ?? '') ?? false,
+    mockMode: bool.tryParse(envMap['MOCK_MODE'] ?? ''),
   );
 }
 

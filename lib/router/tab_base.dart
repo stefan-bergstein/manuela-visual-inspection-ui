@@ -30,7 +30,7 @@ class TabBase extends StatelessWidget {
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (breakpoint > Breakpoint.sm)
+          if (breakpoint > Breakpoint.sm) ...[
             NavigationRail(
               selectedIndex: navigationShell.currentIndex,
               labelType: NavigationRailLabelType.all,
@@ -44,23 +44,32 @@ class TabBase extends StatelessWidget {
                   .toList(),
               onDestinationSelected: (index) => _onTap(context, index),
             ),
+            const VerticalDivider(width: 1.0),
+          ],
           Expanded(
             child: navigationShell,
           ),
         ],
       ),
       bottomNavigationBar: breakpoint <= Breakpoint.sm
-          ? NavigationBar(
-              selectedIndex: navigationShell.currentIndex,
-              destinations: TabMeta.values
-                  .map(
-                    (tab) => NavigationDestination(
-                      icon: Icon(tab.icon),
-                      label: tab.text,
-                    ),
-                  )
-                  .toList(),
-              onDestinationSelected: (index) => _onTap(context, index),
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Divider(height: 1.0),
+                NavigationBar(
+                  selectedIndex: navigationShell.currentIndex,
+                  destinations: TabMeta.values
+                      .map(
+                        (tab) => NavigationDestination(
+                          icon: Icon(tab.icon),
+                          label: tab.text,
+                        ),
+                      )
+                      .toList(),
+                  onDestinationSelected: (index) => _onTap(context, index),
+                ),
+              ],
             )
           : const SizedBox(),
     );

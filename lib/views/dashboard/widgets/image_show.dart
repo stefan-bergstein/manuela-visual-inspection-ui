@@ -83,9 +83,9 @@ class _ImageShowState extends ConsumerState<ImageShow>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final yoloImage = ref.watch(yOLOImagesStreamProvider());
+    final yoloImage = ref.watch(yOLOImagesStreamProvider(mockMode: true));
 
-    ref.listen(yOLOImagesStreamProvider(), (previous, next) {
+    ref.listen(yOLOImagesStreamProvider(mockMode: true), (previous, next) {
       next.whenData((value) => _addImageOverlay(value));
     });
 

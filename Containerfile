@@ -1,5 +1,5 @@
 # ------ BUILDER ------
-FROM redhat/ubi8:latest as builder
+FROM registry.access.redhat/ubi8:8.8-854 as builder
 
 # API URL which will be handed down to the flutter web
 # app at build time - if we need to provide it at a later

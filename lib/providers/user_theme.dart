@@ -13,7 +13,7 @@ class UserTheme extends _$UserTheme {
       state = mode;
     } else {
       if (state.index + 1 > ThemeMode.values.length - 1) {
-        state = ThemeMode.values[0];
+        state = ThemeMode.values[1];
       } else {
         state = ThemeMode.values[state.index + 1];
       }
