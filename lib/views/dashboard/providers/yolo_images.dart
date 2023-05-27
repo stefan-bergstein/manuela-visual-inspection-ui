@@ -55,7 +55,10 @@ Stream<YOLOImage> yOLOImagesStream(YOLOImagesStreamRef ref, {bool? mockMode}) {
   if (!mockMode) {
     StreamController<YOLOImage> controller = StreamController();
 
-    Socket socket = io(env.apiURL ?? '');
+    Socket socket = io(env.apiURL ?? '',
+      OptionBuilder()
+      .setTransports(['polling']) 
+      .build());
 
     socket.onConnectError((error) => controller.addError(error));
     socket.on('server2ui2', (data) => controller.add(YOLOImage.fromJSON(data)));
