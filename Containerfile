@@ -59,7 +59,7 @@ RUN flutter pub get
 RUN flutter build web --web-renderer canvaskit --dart-define API_URL=${API_URL}
 
 # ------ RUNNER ------
-FROM registry.access.redhat.com/ubi8/nginx-120
+FROM registry.access.redhat.com/ubi8/nginx-120:1-106
 
 # Copy static files to folder where nginx will serve them
 COPY --from=builder /src/build/web .
